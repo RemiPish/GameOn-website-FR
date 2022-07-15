@@ -12,6 +12,7 @@ const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const closeBtn = document.querySelector(".close");
+const successModal = document.getElementById("successModal");
 
 const first = document.getElementById("first");
 const last = document.getElementById("last");
@@ -19,7 +20,7 @@ const email = document.getElementById("email");
 const dateBirth = document.getElementById("birthdate");
 const quantity = document.getElementById("quantity");
 const location1 = document.getElementById("location1");
-const locationList = document.querySelectorAll("checkbox-input[type=radio]");
+const locationCheck = document.querySelector("checkbox-input[type=radio]:checked");
 const condition = document.getElementById("checkbox1");
 
 const errorMessageArray = {
@@ -79,9 +80,7 @@ function dateBirthValidator() {
 }
 
 function locationValidator() {
-  locationList.forEach((element) => {
-    if (element.checked) return true;
-  });
+  if (locationCheck) return true;
   return false;
 }
 
@@ -119,6 +118,7 @@ function validate() {
     showError(condition, errorMessageArray["conditionInvalid"]);
     isValid = false;
   } else hideError(condition);
+  if (isValid) showSuccess();
   return isValid;
 }
 
@@ -128,4 +128,9 @@ function showError(form, message) {
 }
 function hideError(form) {
   form.parentElement.dataset.errorVisible = "false";
+}
+
+function showSuccess() {
+  formData.style.display = "none";
+  successModal.style.display = "block";
 }
