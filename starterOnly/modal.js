@@ -16,12 +16,10 @@ const closeBtn = document.querySelector(".close");
 const first = document.getElementById("first");
 const last = document.getElementById("last");
 const email = document.getElementById("email");
-const dateBirth = document.getElementById("datebirth");
+const dateBirth = document.getElementById("birthdate");
 const quantity = document.getElementById("quantity");
 const location1 = document.getElementById("location1");
-const locationList = document.querySelectorAll(
-  "checkbox-input[type=radio]:checked"
-);
+const locationList = document.querySelectorAll("checkbox-input[type=radio]");
 const condition = document.getElementById("checkbox1");
 
 const errorMessageArray = {
@@ -48,12 +46,12 @@ function closeModal() {
 closeBtn.addEventListener("click", closeModal);
 
 function firstValidator() {
-  if (first.value == null || first.value.length > 2) return false;
+  if (first.value == "" || first.value.length <= 2) return false;
   return true;
 }
 
 function lastValidator() {
-  if (last.value == null || last.value.length > 2) return false;
+  if (last.value == "" || last.value.length <= 2) return false;
   return true;
 }
 
@@ -66,21 +64,24 @@ function emailValidator() {
 }
 
 function quantityValidator() {
-  let num = quantity.value;
-  if (!isNaN(num) && num % 1 === 0 && num >= 0 && num <= 99) return true;
-  return false;
+  return quantity.value.match(/^\d{1,2}$/);
 }
 
 function dateBirthValidator() {
   let date = new Date(dateBirth.value);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  if (date.getDate) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  }
 
-  return date < today;
+  return false;
 }
 
 function locationValidator() {
-  if (locationList != null) return true;
+  locationList.forEach((element) => {
+    if (element.checked) return true;
+  });
   return false;
 }
 
@@ -88,18 +89,43 @@ function conditionValidator() {
   return condition.checked;
 }
 
-function submit() {
+function validate() {
+  let isValid = true;
   if (!firstValidator()) {
     showError(first, errorMessageArray["nameInvalid"]);
-  } else if (!lastValidator()) {
+    isValid = false;
+  } else hideError(first);
+  if (!lastValidator()) {
     showError(last, errorMessageArray["nameInvalid"]);
-  } else if (!emailValidator()) {
+    isValid = false;
+  } else hideError(last);
+  if (!emailValidator()) {
     showError(email, errorMessageArray["emailInvalid"]);
-  } else if (!quantityValidator()) {
+    isValid = false;
+  } else hideError(email);
+  if (!quantityValidator()) {
     showError(quantity, errorMessageArray["quantityInvalid"]);
-  } else if (!locationValidator()) {
+    isValid = false;
+  } else hideError(quantity);
+  if (!dateBirthValidator()) {
+    showError(dateBirth, errorMessageArray["dateBirthInvalid"]);
+    isValid = false;
+  } else hideError(dateBirth);
+  if (!locationValidator()) {
     showError(location1, errorMessageArray["locationInvalid"]);
-  } else if (!conditionValidator()) {
+    isValid = false;
+  } else hideError(location1);
+  if (!conditionValidator()) {
     showError(condition, errorMessageArray["conditionInvalid"]);
-  }
+    isValid = false;
+  } else hideError(condition);
+  return isValid;
+}
+
+function showError(form, message) {
+  form.parentElement.dataset.errorVisible = "true";
+  form.parentElement.dataset.error = message;
+}
+function hideError(form) {
+  form.parentElement.dataset.errorVisible = "false";
 }
