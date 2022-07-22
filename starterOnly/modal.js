@@ -20,10 +20,28 @@ const email = document.getElementById("email");
 const dateBirth = document.getElementById("birthdate");
 const quantity = document.getElementById("quantity");
 const location1 = document.getElementById("location1");
-const locationCheck = document.querySelector("checkbox-input[type=radio]:checked");
-const condition = document.getElementById("checkbox1");
+const location2 = document.getElementById("location2");
+const location3 = document.getElementById("location3");
+const location4 = document.getElementById("location4");
+const location5 = document.getElementById("location5");
+const location6 = document.getElementById("location6");
 
-const errorMessageArray = {
+const condition = document.getElementById("checkbox1");
+const submitButton = document.getElementById("btn-submit");
+
+first.addEventListener("input", validate);
+last.addEventListener("input", validate);
+email.addEventListener("input", validate);
+dateBirth.addEventListener("input", validate);
+quantity.addEventListener("input", validate);
+condition.addEventListener("input", validate);
+location1.addEventListener("input", validate);
+location2.addEventListener("input", validate);
+location3.addEventListener("input", validate);
+location4.addEventListener("input", validate);
+location5.addEventListener("input", validate);
+location6.addEventListener("input", validate);
+const errormessages = {
   nameInvalid: "Veuillez entrer 2 caractères ou plus.",
   emailInvalid: "Veuillez entrer une adresse mail valide.",
   dateBirthInvalid: "Veuillez entrer une date de naissance valide.",
@@ -38,6 +56,7 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // launch modal form
 function launchModal() {
   modalbg.style.display = "block";
+  submitButton.disabled = true;
 }
 
 function closeModal() {
@@ -79,47 +98,52 @@ function dateBirthValidator() {
   return false;
 }
 
-function locationValidator() {
-  if (locationCheck) return true;
-  return false;
-}
-
 function conditionValidator() {
   return condition.checked;
 }
 
 function validate() {
   let isValid = true;
+
   if (!firstValidator()) {
-    showError(first, errorMessageArray["nameInvalid"]);
+    if (first.value != "") showError(first, errormessages["nameInvalid"]);
     isValid = false;
   } else hideError(first);
+
   if (!lastValidator()) {
-    showError(last, errorMessageArray["nameInvalid"]);
+    if (last.value != "") showError(last, errormessages["nameInvalid"]);
     isValid = false;
   } else hideError(last);
+
   if (!emailValidator()) {
-    showError(email, errorMessageArray["emailInvalid"]);
+    if (email.value != "") showError(email, errormessages["emailInvalid"]);
     isValid = false;
   } else hideError(email);
+
   if (!quantityValidator()) {
-    showError(quantity, errorMessageArray["quantityInvalid"]);
+    if (quantity.value != "")
+      showError(quantity, errormessages["quantityInvalid"]);
     isValid = false;
   } else hideError(quantity);
+
   if (!dateBirthValidator()) {
-    showError(dateBirth, errorMessageArray["dateBirthInvalid"]);
+    if (dateBirth.value != "")
+      showError(dateBirth, errormessages["dateBirthInvalid"]);
     isValid = false;
   } else hideError(dateBirth);
-  if (!locationValidator()) {
-    showError(location1, errorMessageArray["locationInvalid"]);
+
+  const locationCheck = document.querySelectorAll("input[type=radio]:checked");
+  if (locationCheck.length === 0) {
+    showError(location1, errormessages["locationInvalid"]);
     isValid = false;
   } else hideError(location1);
+
   if (!conditionValidator()) {
-    showError(condition, errorMessageArray["conditionInvalid"]);
+    showError(condition, errormessages["conditionInvalid"]);
     isValid = false;
   } else hideError(condition);
-  if (isValid) showSuccess();
-  return isValid;
+  if(!isValid) submitButton.disabled= true;
+  else submitButton.disabled= false;
 }
 
 function showError(form, message) {
@@ -131,6 +155,6 @@ function hideError(form) {
 }
 
 function showSuccess() {
-  formData.style.display = "none";
-  successModal.style.display = "block";
+  /*formData.style.display = "none";
+  successModal.style.display = "block";*/
 }
