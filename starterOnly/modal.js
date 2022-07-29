@@ -10,6 +10,7 @@ function editNav() {
 // DOM Elements
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
+const form = document.querySelector("form");
 const formData = document.querySelectorAll(".formData");
 const closeBtn = document.querySelector(".close");
 const successModal = document.getElementById("successModal");
@@ -28,11 +29,12 @@ const location6 = document.getElementById("location6");
 
 const condition = document.getElementById("checkbox1");
 const submitButton = document.getElementById("btn-submit");
+const fermerButton = document.querySelector(".fermer-btn");
 
 first.addEventListener("input", validate);
 last.addEventListener("input", validate);
 email.addEventListener("input", validate);
-dateBirth.addEventListener("input", validate);
+dateBirth.addEventListener("change", validate);
 quantity.addEventListener("input", validate);
 condition.addEventListener("input", validate);
 location1.addEventListener("input", validate);
@@ -41,6 +43,14 @@ location3.addEventListener("input", validate);
 location4.addEventListener("input", validate);
 location5.addEventListener("input", validate);
 location6.addEventListener("input", validate);
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  form.style.display = "none";
+  successModal.style.display = "flex";
+  successModal.style.visibility = "visible";
+});
+
 const errormessages = {
   nameInvalid: "Veuillez entrer 2 caractères ou plus.",
   emailInvalid: "Veuillez entrer une adresse mail valide.",
@@ -64,6 +74,7 @@ function closeModal() {
 }
 
 closeBtn.addEventListener("click", closeModal);
+fermerButton.addEventListener("click", closeModal);
 
 function firstValidator() {
   if (first.value == "" || first.value.length <= 2) return false;
@@ -127,8 +138,7 @@ function validate() {
   } else hideError(quantity);
 
   if (!dateBirthValidator()) {
-    if (dateBirth.value != "")
-      showError(dateBirth, errormessages["dateBirthInvalid"]);
+    showError(dateBirth, errormessages["dateBirthInvalid"]);
     isValid = false;
   } else hideError(dateBirth);
 
@@ -142,8 +152,8 @@ function validate() {
     showError(condition, errormessages["conditionInvalid"]);
     isValid = false;
   } else hideError(condition);
-  if(!isValid) submitButton.disabled= true;
-  else submitButton.disabled= false;
+  if (!isValid) submitButton.disabled = true;
+  else submitButton.disabled = false;
 }
 
 function showError(form, message) {
@@ -152,9 +162,4 @@ function showError(form, message) {
 }
 function hideError(form) {
   form.parentElement.dataset.errorVisible = "false";
-}
-
-function showSuccess() {
-  /*formData.style.display = "none";
-  successModal.style.display = "block";*/
 }
