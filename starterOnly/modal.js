@@ -31,18 +31,62 @@ const condition = document.getElementById("checkbox1");
 const submitButton = document.getElementById("btn-submit");
 const fermerButton = document.querySelector(".fermer-btn");
 
-first.addEventListener("input", validate);
-last.addEventListener("input", validate);
-email.addEventListener("input", validate);
-dateBirth.addEventListener("change", validate);
-quantity.addEventListener("input", validate);
-condition.addEventListener("input", validate);
-location1.addEventListener("input", validate);
-location2.addEventListener("input", validate);
-location3.addEventListener("input", validate);
-location4.addEventListener("input", validate);
-location5.addEventListener("input", validate);
-location6.addEventListener("input", validate);
+first.addEventListener("input", () => {
+  if (!firstValidator()) showError(first, errormessages["nameInvalid"]);
+  else hideError(first);
+  validate();
+});
+
+last.addEventListener("input", () => {
+  if (!lastValidator()) showError(last, errormessages["nameInvalid"]);
+  else hideError(last);
+  validate();
+});
+
+email.addEventListener("input", () => {
+  if (!emailValidator()) showError(email, errormessages["emailInvalid"]);
+  else hideError(email);
+  validate();
+});
+dateBirth.addEventListener("blur", () => {
+  if (!dateBirthValidator()) {
+    showError(dateBirth, errormessages["dateBirthInvalid"]);
+  } else hideError(dateBirth);
+  validate();
+});
+
+quantity.addEventListener("input", () => {
+  if (!quantityValidator())
+    showError(quantity, errormessages["quantityInvalid"]);
+  else hideError(quantity);
+  validate();
+});
+
+condition.addEventListener("input", () => {
+  if (!conditionValidator())
+    showError(condition, errormessages["conditionInvalid"]);
+  else hideError(condition);
+  validate();
+});
+
+location1.addEventListener("click", () => {
+  validate();
+});
+location2.addEventListener("click", () => {
+  validate();
+});
+location3.addEventListener("click", () => {
+  validate();
+});
+location4.addEventListener("click", () => {
+  validate();
+});
+location5.addEventListener("click", () => {
+  validate();
+});
+location6.addEventListener("click", () => {
+  validate();
+});
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -99,61 +143,42 @@ function quantityValidator() {
 }
 
 function dateBirthValidator() {
-  let date = new Date(dateBirth.value);
-  if (date.getDate) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return date < today;
+  if (dateBirth.value === "") return false;
+  else {
+    const db = new Date(dateBirth.value);
+    const year18 = new Date();
+    year18.setFullYear(year18.getFullYear() - 18);
+    return db.getTime() <= year18.getTime();
   }
-
-  return false;
 }
 
 function conditionValidator() {
+ 
   return condition.checked;
 }
 
 function validate() {
-  let isValid = true;
-
-  if (!firstValidator()) {
-    if (first.value != "") showError(first, errormessages["nameInvalid"]);
-    isValid = false;
-  } else hideError(first);
-
-  if (!lastValidator()) {
-    if (last.value != "") showError(last, errormessages["nameInvalid"]);
-    isValid = false;
-  } else hideError(last);
-
-  if (!emailValidator()) {
-    if (email.value != "") showError(email, errormessages["emailInvalid"]);
-    isValid = false;
-  } else hideError(email);
-
-  if (!quantityValidator()) {
-    if (quantity.value != "")
-      showError(quantity, errormessages["quantityInvalid"]);
-    isValid = false;
-  } else hideError(quantity);
-
-  if (!dateBirthValidator()) {
-    showError(dateBirth, errormessages["dateBirthInvalid"]);
-    isValid = false;
-  } else hideError(dateBirth);
-
-  const locationCheck = document.querySelectorAll("input[type=radio]:checked");
-  if (locationCheck.length === 0) {
-    showError(location1, errormessages["locationInvalid"]);
-    isValid = false;
-  } else hideError(location1);
-
-  if (!conditionValidator()) {
-    showError(condition, errormessages["conditionInvalid"]);
-    isValid = false;
-  } else hideError(condition);
-  if (!isValid) submitButton.disabled = true;
-  else submitButton.disabled = false;
+  if (
+    firstValidator() &&
+    lastValidator() &&
+    emailValidator() &&
+    dateBirthValidator() &&
+    quantityValidator() &&
+    conditionValidator()
+  ) {
+    const locationCheck = document.querySelectorAll(
+      "input[type=radio]:checked"
+    );
+    if (locationCheck.length === 0) {
+      showError(location1, errormessages["locationInvalid"]);
+    } else {
+      hideError(location1);
+      submitButton.disabled = false;
+    }
+  } else{
+    console.log('REEE')
+    submitButton.disabled = true;
+  } 
 }
 
 function showError(form, message) {
