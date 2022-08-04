@@ -153,7 +153,6 @@ function dateBirthValidator() {
 }
 
 function conditionValidator() {
- 
   return condition.checked;
 }
 
@@ -175,10 +174,9 @@ function validate() {
       hideError(location1);
       submitButton.disabled = false;
     }
-  } else{
-    console.log('REEE')
+  } else {
     submitButton.disabled = true;
-  } 
+  }
 }
 
 function showError(form, message) {
