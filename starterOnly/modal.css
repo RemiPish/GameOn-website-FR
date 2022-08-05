@@ -533,8 +533,8 @@ footer {
   .topnav.responsive .main-navbar {
     margin-right: 0px;
     margin-bottom: 40px;
+  }
 }
-
 @keyframes modalopen {
   from {
     opacity: 0;
