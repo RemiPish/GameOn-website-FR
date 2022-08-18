@@ -12,14 +12,25 @@ const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const form = document.querySelector("form");
 const formData = document.querySelectorAll(".formData");
+
+//bouton fermer
 const closeBtn = document.querySelector(".close");
+
+//modal du succes apres le formulaire valide
 const successModal = document.getElementById("successModal");
 
+//formulaire champ prenom
 const first = document.getElementById("first");
+//formulaire champ nom
 const last = document.getElementById("last");
+//formulaire champ adresse mail
 const email = document.getElementById("email");
+//formulaire champ date de naissance
 const dateBirth = document.getElementById("birthdate");
+//formulaire champ nombre de fois
 const quantity = document.getElementById("quantity");
+
+//formulaire champs lieux
 const location1 = document.getElementById("location1");
 const location2 = document.getElementById("location2");
 const location3 = document.getElementById("location3");
@@ -27,10 +38,17 @@ const location4 = document.getElementById("location4");
 const location5 = document.getElementById("location5");
 const location6 = document.getElementById("location6");
 
+//formulaire checkbox conditions d'utilisation
 const condition = document.getElementById("checkbox1");
+
+//bouton soumettre formulaire
 const submitButton = document.getElementById("btn-submit");
+
+//bouton croix qui ferme le modal formulaire
 const fermerButton = document.querySelector(".fermer-btn");
 
+
+//fonctions ecoutant les changements input et blur sur les champs du formulaire pour valider, affiche ou cache le message d'erreur
 first.addEventListener("input", () => {
   if (!firstValidator()) showError(first, errormessages["nameInvalid"]);
   else hideError(first);
@@ -88,6 +106,8 @@ location6.addEventListener("click", () => {
   validate();
 });
 
+
+//lors qu'on reussit a soumettre un formulaire valide, le modal de succes s'affiche
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   form.style.display = "none";
@@ -95,6 +115,7 @@ form.addEventListener("submit", (e) => {
   successModal.style.visibility = "visible";
 });
 
+//message erreur
 const errormessages = {
   nameInvalid: "Veuillez entrer 2 caractères ou plus.",
   emailInvalid: "Veuillez entrer une adresse mail valide.",
@@ -111,8 +132,10 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 function launchModal() {
   modalbg.style.display = "block";
   submitButton.disabled = true;
+  validate();
 }
 
+//ferme la modale
 function closeModal() {
   modalbg.style.display = "none";
 }
@@ -120,16 +143,19 @@ function closeModal() {
 closeBtn.addEventListener("click", closeModal);
 fermerButton.addEventListener("click", closeModal);
 
+//champ prenom invalide si vide ou moins de 3 caracteres
 function firstValidator() {
   if (first.value == "" || first.value.length <= 2) return false;
   return true;
 }
 
+//champ nom invalide si vide ou moins de 3 caracteres
 function lastValidator() {
   if (last.value == "" || last.value.length <= 2) return false;
   return true;
 }
 
+//champ mail invalide si ce n'est pas une adresse mail
 function emailValidator() {
   return email.value
     .toLowerCase()
@@ -138,10 +164,12 @@ function emailValidator() {
     );
 }
 
+//champ nombre de fois valide si c'est un nombre entre 0 et 99
 function quantityValidator() {
   return quantity.value.match(/^\d{1,2}$/);
 }
 
+//champ date de naissance valide si la date entree a plus de 18 ans
 function dateBirthValidator() {
   if (dateBirth.value === "") return false;
   else {
@@ -152,10 +180,12 @@ function dateBirthValidator() {
   }
 }
 
+//valide si le checkbox est rempli
 function conditionValidator() {
   return condition.checked;
 }
 
+//fonction pour valider le formulaire qui verifie les ville en derniere au cas ou tous les autres champs sont valide
 function validate() {
   if (
     firstValidator() &&
@@ -179,10 +209,13 @@ function validate() {
   }
 }
 
+//affiche les messages d'erreurs sous chaque champ respectif
 function showError(form, message) {
   form.parentElement.dataset.errorVisible = "true";
   form.parentElement.dataset.error = message;
 }
+
+//cache les messages d'erreurs 
 function hideError(form) {
   form.parentElement.dataset.errorVisible = "false";
 }
