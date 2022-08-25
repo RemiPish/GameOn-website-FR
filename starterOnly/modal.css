@@ -419,6 +419,17 @@ input[data-error]::after {
   font-weight: normal;
   white-space: nowrap;
 }
+@media screen and (max-width: 470px) {
+  .hero-headline {
+    font-size: 2rem !important;
+    overflow-wrap: break-word;
+  }
+  .hero-text {
+    width: 75% !important;
+    overflow-wrap: break-word;
+  }
+}
+
 .hero-text {
   width: 146%;
   font-weight: normal;
@@ -476,6 +487,7 @@ footer {
 
   .topnav.responsive {
     position: relative;
+    flex-wrap: wrap;
   }
   .topnav.responsive .icon {
     position: absolute;
